@@ -1105,7 +1105,7 @@ uint16_t NUM_MENU_ITEMS = 0;
 
 #### 1. Portenta_H7_WiFi example on Portenta_H7
 
-This is the terminal output when running [**Portenta_H7_WiFi**](examples/Portenta_H7_WiFi) example on **Nano-33 IoT**:
+This is the terminal output when running [**Portenta_H7_WiFi**](examples/Portenta_H7_WiFi) example on **Portenta_H7**:
 
 #### 1.1 Open Config Portal
 
