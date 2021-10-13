@@ -82,7 +82,7 @@
 
 ### Important Notes for Portenta_H7
 
-The LittleFS of the new **Portenta_H7** board currently tested OK with only **maximum 8 files**. The files, from 9 and up, somehow strangely can't be written and / or read. This is possibly a bug in the [`ArduinoCore-mbed mbed_portenta core`](https://github.com/arduino/ArduinoCore-mbed). The same behaviour is observed from core v2.0.0 up to v2.4.1.
+The LittleFS of the new **Portenta_H7** board currently tested OK with only **maximum 8 files**. The files, from 9 and up, somehow strangely can't be written and / or read. This is possibly a bug in the [`ArduinoCore-mbed mbed_portenta core`](https://github.com/arduino/ArduinoCore-mbed). The same behaviour is observed from core v2.0.0 up to v2.5.2.
 
 If LittleFS size is reduced to 1024KB, test is OK with only **maximum 4 files**.
 
@@ -147,12 +147,13 @@ This [**WiFiManager_Portenta_H7_Lite** library](https://github.com/khoih-prog/Wi
 ## Prerequisites
 
 1. [`Arduino IDE 1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
-2. [`ArduinoCore-mbed mbed_portenta core 2.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+2. [`ArduinoCore-mbed mbed_portenta core 2.5.2+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 
 
 3. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-4. [`WiFiWebServer library v1.4.0+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
-5. [`DoubleResetDetector_Generic v1.7.2+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
+4. [`WiFiWebServer library v1.4.2+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+5. [`LittleFS_Portenta_H7 v1.0.2+`](https://github.com/khoih-prog/LittleFS_Portenta_H7). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_Portenta_H7.svg?)](https://www.ardu-badge.com/LittleFS_Portenta_H7)
+6. [`DoubleResetDetector_Generic v1.7.3+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
 
 ---
 
@@ -185,12 +186,12 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 #### 1. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -203,9 +204,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.4.1. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 2.5.2. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.4.1/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -1111,7 +1112,7 @@ This is the terminal output when running [**Portenta_H7_WiFi**](examples/Portent
 
 ```
 Start Portenta_H7_WiFi on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.0
+WiFiManager_Portenta_H7_Lite v1.4.1
 [WG] Hostname=Portenta-Controller
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1156,7 +1157,7 @@ FFFFFFFFF FFFFF
 
 ```
 Start Portenta_H7_WiFi on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.0
+WiFiManager_Portenta_H7_Lite v1.4.1
 [WG] Hostname=Portenta-Controller
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1220,7 +1221,7 @@ This is the terminal output when running [**Portenta_H7_WiFi_MQTT**](examples/Po
 
 ```
 Start Portenta_H7_WiFi_MQTT on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.0
+WiFiManager_Portenta_H7_Lite v1.4.1
 [WG] Hostname=Portenta-MQTT
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1264,7 +1265,7 @@ NNNN NNNNN NNNNN NNNNN NNNNN NNNNN NNNNN NN
 
 ```
 Start Portenta_H7_WiFi_MQTT on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.0
+WiFiManager_Portenta_H7_Lite v1.4.1
 [WG] Hostname=Portenta-MQTT
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000

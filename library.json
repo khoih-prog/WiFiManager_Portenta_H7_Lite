@@ -1,6 +1,6 @@
 {
   "name": "WiFiManager_Portenta_H7_Lite",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "keywords": "wifi, wi-fi, multi-wifi, config-portal, Double-Reset, dynamic-params, LittleFS, LittleFS-Portenta, Credentials, littlefs-mbed, posix, file-system, mbed, mbed-portenta, portenta-h7, portentah7, portenta-h7-m7, portenta-h7-m4, portentah7-m7, portentah7-m4",
   "description": "Library to configure MultiWiFi/Credentials at runtime for Portenta_H7 boards, using built-in WiFi (Murata) modules/shields. You can also specify DHCP HostName, static AP and STA IP. Use much less memory compared to full-fledge WiFiManager. Config Portal will be auto-adjusted to match the number of dynamic custom parameters. Optional default Credentials to be autoloaded into Config Portal to use or change instead of manually input. Credentials are saved in LittleFS. New powerful-yet-simple-to-use feature to enable adding dynamic custom parameters from sketch and input using the same Config Portal. DoubleDetectDetector as well as Virtual Switches feature permits entering Config Portal as requested.",
   "authors":
@@ -27,17 +27,17 @@
     {
       "owner": "khoih-prog",
       "name": "WiFiWebServer",
-      "version": "^1.4.0",
+      "version": "^1.4.1",
       "platforms": ["*"]
     },
     {
       "owner": "khoih-prog",
       "name": "DoubleResetDetector_Generic",
-      "version": "^1.7.2",
+      "version": "^1.7.3",
       "platforms": ["*"]
     },
     {
-      "owner": "khoih.prog",
+      "owner": "khoih-prog",
       "name": "LittleFS_Portenta_H7",
       "version": "^1.0.2",
       "platforms": ["mbed_portenta"]

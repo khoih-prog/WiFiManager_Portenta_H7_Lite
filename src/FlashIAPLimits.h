@@ -9,11 +9,12 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite
   Licensed under MIT license
-  Version: 1.4.0
+  Version: 1.4.1
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
   1.4.0   K Hoang      11/09/2021  Add support to Portenta_H7 using Arduino mbed_portenta core
+  1.4.1   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
 *****************************************************************************************************************************/
 
 #pragma once
