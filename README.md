@@ -13,7 +13,8 @@
 
 * [Important Notes for Portenta_H7](#important-notes-for-portenta_h7)
   * [LittleFS](#littlefs)
-  * [WiFi Status bug](#WiFi-status-bug)
+  * [WiFi.status() bug](#wifistatus-bug)
+  * [WiFi.begin() bug](#wifibegin-bug)
 * [Why do we need this WiFiManager_Portenta_H7_Lite library](#why-do-we-need-this-WiFiManager_Portenta_H7_Lite-library)
   * [Features](#features)
   * [Currently supported Boards](#currently-supported-boards)
@@ -96,7 +97,7 @@ If LittleFS size is reduced to 1024KB, test is OK with only **maximum 4 files**.
 
 Beware and keep checking for updates.
 
-#### WiFi Status bug
+#### WiFi.status() bug
 
 The current `mbed_portenta core v2.6.1` has bug that once WiFi is connected, `WiFi.status()` always reports `WL_CONNECTED` even if WiFi is lost.
 
