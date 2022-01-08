@@ -41,6 +41,7 @@ setCustomsHeadElement   KEYWORD2
 getCustomsHeadElement   KEYWORD2
 setCORSHeader   KEYWORD2
 getCORSHeader   KEYWORD2
+WiFiConnected   KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

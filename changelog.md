@@ -12,6 +12,7 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Release v1.5.0](#release-v150)
   * [Release v1.4.1](#release-v141)
   * [Initial Release v1.4.0](#initial-release-v140)
 
@@ -19,6 +20,14 @@
 ---
 
 ## Changelog
+
+### Release v1.5.0
+
+1. Workaround for core WiFi.status() bug, which does not detect WiFi lost.
+2. Fix the blocking issue in loop(). Check [retries block the main loop #18](https://github.com/khoih-prog/WiFiManager_NINA_Lite/issues/18)
+3. Configurable `WIFI_RECON_INTERVAL`. Check [retries block the main loop #18](https://github.com/khoih-prog/WiFiManager_NINA_Lite/issues/18#issuecomment-1006197561)
+4. Update `Packages' Patches`
+
 
 ### Release v1.4.1
 

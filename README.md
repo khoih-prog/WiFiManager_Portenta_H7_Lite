@@ -12,6 +12,8 @@
 ## Table of Contents
 
 * [Important Notes for Portenta_H7](#important-notes-for-portenta_h7)
+  * [LittleFS](#littlefs)
+  * [WiFi Status bug](#WiFi-status-bug)
 * [Why do we need this WiFiManager_Portenta_H7_Lite library](#why-do-we-need-this-WiFiManager_Portenta_H7_Lite-library)
   * [Features](#features)
   * [Currently supported Boards](#currently-supported-boards)
@@ -43,6 +45,9 @@
     * [12.1 Enable auto-scan of WiFi networks for selection in Configuration Portal](#121-enable-auto-scan-of-wifi-networks-for-selection-in-configuration-portal)
     * [12.2 Disable manually input SSIDs](#122-disable-manually-input-ssids)
     * [12.3 Select maximum number of SSIDs in the list](#123-select-maximum-number-of-ssids-in-the-list)
+  * [13. To avoid blocking in loop when WiFi is lost](#13-To-avoid-blocking-in-loop-when-wifi-is-lost)
+    * [13.1 Max times to try WiFi per loop](#131-max-times-to-try-wifi-per-loop)
+    * [13.2 Interval between reconnection WiFi if lost](#132-interval-between-reconnection-wifi-if-lost) 
 * [Examples](#examples)
   * [ 1. Portenta_H7_WiFi](examples/Portenta_H7_WiFi)
   * [ 2. Portenta_H7_WiFi_MQTT](examples/Portenta_H7_WiFi_MQTT)
@@ -83,12 +88,30 @@
 
 ### Important Notes for Portenta_H7
 
+#### LittleFS
+
 The LittleFS of the new **Portenta_H7** board currently tested OK with only **maximum 8 files**. The files, from 9 and up, somehow strangely can't be written and / or read. This is possibly a bug in the [`ArduinoCore-mbed mbed_portenta core`](https://github.com/arduino/ArduinoCore-mbed). The same behaviour is observed from core v2.0.0 up to v2.5.2.
 
 If LittleFS size is reduced to 1024KB, test is OK with only **maximum 4 files**.
 
-Beware and keep cheking for updates.
+Beware and keep checking for updates.
 
+#### WiFi Status bug
+
+The current `mbed_portenta core v2.6.1` has bug that once WiFi is connected, `WiFi.status()` always reports `WL_CONNECTED` even if WiFi is lost.
+
+The current workaround for this `WiFi.status()` bug is to use it with `WiFi.RSSI()`, such as 
+
+```
+bool WiFiConnected()
+{
+  return ( (WiFi.status() == WL_CONNECTED) && (WiFi.RSSI() != 0) );
+}
+```
+
+This not-100%-perfect workaround is working only whenever the **WiFi is totally powered down (RSSI == 0)**, but still better than nothing.
+
+Will post an issue in the core soon.
 
 ---
 ---
@@ -147,13 +170,13 @@ This [**WiFiManager_Portenta_H7_Lite** library](https://github.com/khoih-prog/Wi
 
 ## Prerequisites
 
-1. [`Arduino IDE 1.8.16+` for Arduino](https://www.arduino.cc/en/Main/Software)
-2. [`ArduinoCore-mbed mbed_portenta core 2.5.2+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+1. [`Arduino IDE 1.8.19+` for Arduino](https://www.arduino.cc/en/Main/Software)
+2. [`ArduinoCore-mbed mbed_portenta core 2.6.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 
 
 3. [`Functional-VLPP library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-4. [`WiFiWebServer library v1.4.2+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
-5. [`LittleFS_Portenta_H7 v1.0.2+`](https://github.com/khoih-prog/LittleFS_Portenta_H7). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_Portenta_H7.svg?)](https://www.ardu-badge.com/LittleFS_Portenta_H7)
+4. [`WiFiWebServer library v1.5.3+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+5. [`LittleFS_Portenta_H7 v1.1.0+`](https://github.com/khoih-prog/LittleFS_Portenta_H7). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_Portenta_H7.svg?)](https://www.ardu-badge.com/LittleFS_Portenta_H7)
 6. [`DoubleResetDetector_Generic v1.7.3+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
 
 ---
@@ -187,12 +210,12 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 #### 1. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -205,9 +228,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.5.2. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 2.6.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.5.2/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -444,6 +467,39 @@ The maximum number of SSIDs in the list is selectable from 2 to 15 (for ESP8266/
 // From 2-15
 #define MAX_SSID_IN_LIST                    8
 ```
+
+#### 13. To avoid blocking in loop when WiFi is lost
+
+
+#### 13.1 Max times to try WiFi per loop
+
+To define max times to try WiFi per loop() iteration. To avoid blocking issue in loop()
+
+Default is 1 if not defined, and minimum is forced to be 1.
+
+To use, uncomment in `defines.h`. 
+
+Check [retries block the main loop #18](https://github.com/khoih-prog/WiFiManager_NINA_Lite/issues/18#issue-1094004380)
+
+```
+#define MAX_NUM_WIFI_RECON_TRIES_PER_LOOP     2
+```
+
+#### 13.2 Interval between reconnection WiFi if lost
+
+Default is no interval between reconnection WiFi times if lost WiFi. Max permitted interval will be 10mins.
+
+Uncomment to use. Be careful, WiFi reconnection will be delayed if using this method.
+
+Only use whenever urgent tasks in loop() can't be delayed. But if so, it's better you have to rewrite your code, e.g. using higher priority tasks.
+
+Check [retries block the main loop #18](https://github.com/khoih-prog/WiFiManager_NINA_Lite/issues/18#issuecomment-1006197561)
+
+```
+#define WIFI_RECON_INTERVAL                   30000     // 30s
+```
+
+
 
 ---
 ---
@@ -916,9 +972,21 @@ void loop()
 
 // Permit input only one set of WiFi SSID/PWD. The other can be "NULL or "blank"
 // Default is false (if not defined) => must input 2 sets of SSID/PWD
-#define REQUIRE_ONE_SET_SSID_PW       false
+#define REQUIRE_ONE_SET_SSID_PW             true    //false
 
-#define USE_DYNAMIC_PARAMETERS        true    //false
+// Max times to try WiFi per loop() iteration. To avoid blocking issue in loop()
+// Default 1 if not defined, and minimum 1.
+//#define MAX_NUM_WIFI_RECON_TRIES_PER_LOOP     2
+
+// Default no interval between recon WiFi if lost
+// Max permitted interval will be 10mins
+// Uncomment to use. Be careful, WiFi reconnect will be delayed if using this method
+// Only use whenever urgent tasks in loop() can't be delayed. But if so, it's better you have to rewrite your code, e.g. using higher priority tasks.
+#define WIFI_RECON_INTERVAL                   30000
+
+/////////////////////////////////////////////
+
+#define USE_DYNAMIC_PARAMETERS        true
 
 /////////////////////////////////////////////
 
@@ -1113,7 +1181,7 @@ This is the terminal output when running [**Portenta_H7_WiFi**](examples/Portent
 
 ```
 Start Portenta_H7_WiFi on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.1
+WiFiManager_Portenta_H7_Lite v1.5.0
 [WG] Hostname=Portenta-Controller
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1158,7 +1226,7 @@ FFFFFFFFF FFFFF
 
 ```
 Start Portenta_H7_WiFi on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.1
+WiFiManager_Portenta_H7_Lite v1.5.0
 [WG] Hostname=Portenta-Controller
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1222,7 +1290,7 @@ This is the terminal output when running [**Portenta_H7_WiFi_MQTT**](examples/Po
 
 ```
 Start Portenta_H7_WiFi_MQTT on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.1
+WiFiManager_Portenta_H7_Lite v1.5.0
 [WG] Hostname=Portenta-MQTT
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1266,7 +1334,7 @@ NNNN NNNNN NNNNN NNNNN NNNNN NNNNN NNNNN NN
 
 ```
 Start Portenta_H7_WiFi_MQTT on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.4.1
+WiFiManager_Portenta_H7_Lite v1.5.0
 [WG] Hostname=Portenta-MQTT
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1394,6 +1462,8 @@ Submit issues to: [WiFiManager_Portenta_H7_Lite issues](https://github.com/khoih
 20. Enforce WiFi Password minimum length of 8 chars
 21. Enable **scan of WiFi networks** for selection in Configuration Portal
 22. Add `LibraryPatches` for [**Adafruit_MQTT_Library**](https://github.com/adafruit/Adafruit_MQTT_Library) to fix compiler error for Portenta_H7, RP2040-based and many other boards.
+23. Fix the blocking issue in loop() with configurable `WIFI_RECON_INTERVAL`
+24. Workaround for core WiFi.status() bug, which does not detect WiFi lost.
 
 ---
 ---
@@ -1404,11 +1474,12 @@ Please help contribute to this project and add your name here.
 
 1. Again thanks to [Michael H. "bizprof"](https://github.com/bizprof) for the impressive feature being usd in this library : 
   - `Enable scan of WiFi networks for selection in Configuration Portal`. Check [PR for v1.3.0 - Enable scan of WiFi networks #10](https://github.com/khoih-prog/WiFiManager_NINA_Lite/pull/10)
-
+2. Thanks to [tomtobback](https://github.com/tomtobback) to report issue [retries block the main loop #18](https://github.com/khoih-prog/WiFiManager_NINA_Lite/issues/18) leading to version v1.5.0 to fix the blocking issue in loop() with `WIFI_RECON_INTERVAL`.
 
 <table>
   <tr>
     <td align="center"><a href="https://github.com/bizprof"><img src="https://github.com/bizprof.png" width="100px;" alt="bizprof"/><br /><sub><b>⭐️⭐️ Michael H. "bizprof"</b></sub></a><br /></td>
+    <td align="center"><a href="https://github.com/tomtobback"><img src="https://github.com/tomtobback.png" width="100px;" alt="tomtobback"/><br /><sub><b>tomtobback</b></sub></a><br /></td>
   </tr> 
 </table>
 

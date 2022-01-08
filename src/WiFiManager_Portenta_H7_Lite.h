@@ -8,12 +8,13 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite
   Licensed under MIT license
-  Version: 1.4.1
+  Version: 1.5.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
   1.4.0   K Hoang      11/09/2021  Add support to Portenta_H7 using Arduino mbed_portenta core
-  1.4.1   K Hoang      12/10/2021 Update `platform.ini` and `library.json`
+  1.4.1   K Hoang      12/10/2021  Update `platform.ini` and `library.json`
+  1.5.0   K Hoang      08/01/2022  Workaround for core WiFi.status() bug. Fix the blocking issue in loop().
  ********************************************************************************************************************************/
 
 #ifndef WiFiManager_Portenta_H7_Lite_h
@@ -38,7 +39,7 @@
   #error This code is intended to run on the MBED ARDUINO_PORTENTA_H7 platform! Please check your Tools->Board setting. 
 #endif
 
-#define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION        "WiFiManager_Portenta_H7_Lite v1.4.1"
+#define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION        "WiFiManager_Portenta_H7_Lite v1.5.0"
 
 #include <WiFiWebServer.h>
 
@@ -423,6 +424,17 @@ class WiFiManager_Portenta_H7_Lite
   #endif
 #endif
 
+
+#if !defined(WIFI_RECON_INTERVAL)      
+  #define WIFI_RECON_INTERVAL       0         // default 0s between reconnecting WiFi
+#else
+  #if (WIFI_RECON_INTERVAL < 0)
+    #define WIFI_RECON_INTERVAL     0
+  #elif  (WIFI_RECON_INTERVAL > 600000)
+    #define WIFI_RECON_INTERVAL     600000    // Max 10min
+  #endif
+#endif
+
     void run()
     {
       static int retryTimes = 0;
@@ -434,6 +446,10 @@ class WiFiManager_Portenta_H7_Lite
       static unsigned long checkstatus_timeout = 0;
       #define WIFI_STATUS_CHECK_INTERVAL    5000L
       
+      static uint32_t curMillis;
+      
+      curMillis = millis();
+      
       //// New DRD ////
       // Call the double reset detector loop method every so often,
       // so that it can recognise when the timeout expires.
@@ -442,9 +458,9 @@ class WiFiManager_Portenta_H7_Lite
       drd->loop();
       //// New DRD ////
          
-      if ( !configuration_mode && (millis() > checkstatus_timeout) )
+      if ( !configuration_mode && (curMillis > checkstatus_timeout) )
       {       
-        if (WiFi.status() == WL_CONNECTED)
+        if ( WiFiConnected() )
         {
           wifi_connected = true;
         }
@@ -462,7 +478,7 @@ class WiFiManager_Portenta_H7_Lite
           }
         }
         
-        checkstatus_timeout = millis() + WIFI_STATUS_CHECK_INTERVAL;
+        checkstatus_timeout = curMillis + WIFI_STATUS_CHECK_INTERVAL;
       }    
 
       // Lost connection in running. Give chance to reconfig.
@@ -503,12 +519,31 @@ class WiFiManager_Portenta_H7_Lite
           // Not in config mode, try reconnecting before forcing to config mode
           if ( !wifi_connected )
           {
+            
+ 
+#if (WIFI_RECON_INTERVAL > 0)
+
+            static uint32_t lastMillis = 0;
+            
+            if ( (lastMillis == 0) || (curMillis - lastMillis) > WIFI_RECON_INTERVAL )
+            {
+              lastMillis = curMillis;
+              
+              WG_LOGERROR(F("r:WLost.ReconW"));
+               
+              if (connectMultiWiFi(RETRY_TIMES_RECONNECT_WIFI))
+              {
+                WG_LOGERROR(F("r:WOK"));
+              }
+            }
+#else
             WG_LOGERROR(F("r:WLost.ReconW"));
             
             if (connectMultiWiFi(RETRY_TIMES_RECONNECT_WIFI))
             {
               WG_LOGERROR(F("r:WOK"));
             }
+#endif            
           }
         }
       }
@@ -518,7 +553,7 @@ class WiFiManager_Portenta_H7_Lite
         WG_LOGERROR(F("r:gotWBack"));
       }
     }
-    
+       
     //////////////////////////////////////////////
     
     void setHostname()
@@ -753,6 +788,11 @@ class WiFiManager_Portenta_H7_Lite
       return _CORS_Header;
     }
 #endif
+
+    bool WiFiConnected()
+    {
+      return ( (WiFi.status() == WL_CONNECTED) && (WiFi.RSSI() != 0) );
+    }
           
     //////////////////////////////////////
 
@@ -1446,12 +1486,23 @@ class WiFiManager_Portenta_H7_Lite
     
     //////////////////////////////////////////////
     
+// Max times to try WiFi per loop() iteration. To avoid blocking issue in loop()
+// Default 1 and minimum 1.
+#if !defined(MAX_NUM_WIFI_RECON_TRIES_PER_LOOP)      
+  #define MAX_NUM_WIFI_RECON_TRIES_PER_LOOP     1
+#else
+  #if (MAX_NUM_WIFI_RECON_TRIES_PER_LOOP < 1)  
+    #define MAX_NUM_WIFI_RECON_TRIES_PER_LOOP     1
+  #endif
+#endif
+
+    // New connection logic from v1.2.0
     bool connectMultiWiFi(int retry_time)
     {
       int sleep_time  = 250;
       int index       = 0;
       int new_index   = 0;
-      uint8_t status  = WL_IDLE_STATUS;
+      //uint8_t status  = WL_IDLE_STATUS;
                        
       static int lastConnectedIndex = 255;
 
@@ -1504,16 +1555,20 @@ class WiFiManager_Portenta_H7_Lite
       
       uint8_t numIndexTried = 0;
       
-      while ( !wifi_connected && (numIndexTried++ < NUM_WIFI_CREDENTIALS) )
+      uint8_t numWiFiReconTries = 0;
+     
+      while ( !wifi_connected && (numIndexTried++ < NUM_WIFI_CREDENTIALS) && (numWiFiReconTries++ < MAX_NUM_WIFI_RECON_TRIES_PER_LOOP) )
       {         
         while ( 0 < retry_time )
         {      
           WG_LOGDEBUG1(F("Remaining retry_time="), retry_time);
           
-          status = WiFi.begin(WIFI_GENERIC_config.WiFi_Creds[index].wifi_ssid, WIFI_GENERIC_config.WiFi_Creds[index].wifi_pw); 
+          WiFi.begin(WIFI_GENERIC_config.WiFi_Creds[index].wifi_ssid, WIFI_GENERIC_config.WiFi_Creds[index].wifi_pw); 
+          
+          //delay(3000);
               
           // Need restart WiFi at beginning of each cycle 
-          if (status == WL_CONNECTED)
+          if ( WiFiConnected() )
           {
             wifi_connected = true;          
             lastConnectedIndex = index;                                     
@@ -1528,7 +1583,7 @@ class WiFiManager_Portenta_H7_Lite
           }         
         }
         
-        if (status == WL_CONNECTED)
+        if ( WiFiConnected() )
         {         
           break;
         }
@@ -1548,7 +1603,8 @@ class WiFiManager_Portenta_H7_Lite
             index = new_index;
           }
           
-          //WiFi.end();
+          // Must have for Portenta_H7 to reconnect after WiFi lost
+          WiFi.end();
         }
       }
 

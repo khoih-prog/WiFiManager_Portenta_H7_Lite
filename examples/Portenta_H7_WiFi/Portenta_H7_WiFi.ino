@@ -23,7 +23,9 @@ void heartBeatPrint()
 {
   static int num = 1;
 
-  if (WiFi.status() == WL_CONNECTED)
+  // Must use with WiFi.RSSI() to fix bug in the mbed_portenta core
+  //if ( (WiFi.status() == WL_CONNECTED) && (WiFi.RSSI() != 0) )
+  if ( WiFiManager_Portenta_H7->WiFiConnected() )
     Serial.print(F("H"));        // H means connected to WiFi
   else
     Serial.print(F("F"));        // F means not connected to WiFi
