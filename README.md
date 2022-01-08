@@ -1,4 +1,4 @@
-## WiFiManager_Portenta_H7_Lite (Light Weight Credentials / WiFi Manager for Generic WiFi (WiFiNINA, WiFi101, WiFiEsp, etc.)  modules/shields)
+## WiFiManager_Portenta_H7_Lite (Light Weight Credentials / WiFi Manager for Portenta_H7 built-in Murata WiFi)
 
 [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiManager_Portenta_H7_Lite.svg?)](https://www.ardu-badge.com/WiFiManager_Portenta_H7_Lite)
 [![GitHub release](https://img.shields.io/github/release/khoih-prog/WiFiManager_Portenta_H7_Lite.svg)](https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite/releases)
