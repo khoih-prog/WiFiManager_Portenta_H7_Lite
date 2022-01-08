@@ -111,7 +111,28 @@ bool WiFiConnected()
 
 This not-100%-perfect workaround is working only whenever the **WiFi is totally powered down (RSSI == 0)**, but still better than nothing.
 
-Check [WiFi.status() wrongly reports WL_CONNECTED even when WiFi is lost #381](https://github.com/arduino/ArduinoCore-mbed/issues/381)
+Check 
+
+- [WiFi.status() wrongly reports WL_CONNECTED even when WiFi is lost #381](https://github.com/arduino/ArduinoCore-mbed/issues/381)
+
+
+#### WiFi.begin() bug
+
+The current `mbed_portenta core v2.6.1` has bug that once WiFi is connected and lost, `WiFi.begin()` can't never reconnect even if WiFi is restored.
+
+The current fix for this bug is to use `WiFi.end()` before `WiFi.begin()`, such as 
+
+```
+// Must have to reconnect after WiFi lost
+WiFi.end();
+  
+// Now WiFi.begin() can reconnect to WiFi after lost and restored  
+status = WiFi.begin(ssid, pass);
+```
+
+Check:
+
+- [WiFi.begin() can't reconnect after WiFi lost, then restored #382](https://github.com/arduino/ArduinoCore-mbed/issues/382)
 
 ---
 ---
