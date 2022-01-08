@@ -111,7 +111,7 @@ bool WiFiConnected()
 
 This not-100%-perfect workaround is working only whenever the **WiFi is totally powered down (RSSI == 0)**, but still better than nothing.
 
-Will post an issue in the core soon.
+Check [[Portenta_H7] WiFi.status() wrongly reports WL_CONNECTED even when WiFi is lost #381])https://github.com/arduino/ArduinoCore-mbed/issues/381)
 
 ---
 ---
