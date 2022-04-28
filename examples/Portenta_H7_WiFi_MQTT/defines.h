@@ -114,6 +114,8 @@
 
 /////////////////////////////////////////////
 
+#define USE_WIFI_PORTENTA_H7              true
+
 #include <WiFiManager_Portenta_H7_Lite.h>
 
 #define HOST_NAME   "Portenta-MQTT"

@@ -13,6 +13,8 @@
 #ifndef defines_h
 #define defines_h
 
+#define USING_MBED_PORTENTA_CORE_2_7_2    false
+
 /* Comment this out to disable prints and save space */
 #define DEBUG_WIFI_WEBSERVER_PORT     Serial
 #define WIFI_GENERIC_DEBUG_OUTPUT     Serial
@@ -98,11 +100,11 @@
 
 /////////////////////////////////////////////
 
-#define USE_DYNAMIC_PARAMETERS        true
+#define USE_DYNAMIC_PARAMETERS              true
 
 /////////////////////////////////////////////
 
-#define SCAN_WIFI_NETWORKS                  true
+#define SCAN_WIFI_NETWORKS                  false   //true
 
 // To be able to manually input SSID, not from a scanned SSID lists
 #define MANUAL_SSID_INPUT_ALLOWED           true
@@ -113,6 +115,8 @@
 #define MAX_SSID_IN_LIST                  8
 
 /////////////////////////////////////////////
+
+#define USE_WIFI_PORTENTA_H7              true
 
 #include <WiFiManager_Portenta_H7_Lite.h>
 

@@ -297,7 +297,7 @@ void setup()
 {
   // Debug console
   Serial.begin(115200);
-  while (!Serial);
+  while (!Serial && millis() < 5000);
 
   pinMode(LED_PIN, OUTPUT);
 
@@ -305,6 +305,7 @@ void setup()
 
   Serial.print(F("\nStart Portenta_H7_WiFi_MQTT on ")); Serial.print(BOARD_NAME);
   Serial.print(F(" with ")); Serial.println(SHIELD_TYPE);
+  Serial.println(WIFIMULTI_GENERIC_VERSION);
   Serial.println(WIFI_MANAGER_PORTENTA_H7_LITE_VERSION);
 
   WiFiManager_Portenta_H7 = new WiFiManager_Portenta_H7_Lite();

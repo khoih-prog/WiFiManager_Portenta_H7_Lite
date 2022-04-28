@@ -12,6 +12,8 @@
 ## Table of Contents
 
 * [Changelog](#changelog)
+  * [Release v1.6.0](#release-v160)
+  * [Release v1.5.1](#release-v151)
   * [Release v1.5.0](#release-v150)
   * [Release v1.4.1](#release-v141)
   * [Initial Release v1.4.0](#initial-release-v140)
@@ -20,6 +22,17 @@
 ---
 
 ## Changelog
+
+### Release v1.6.0
+
+1. Use [WiFiMulti_Generic](https://github.com/khoih-prog/WiFiMulti_Generic) library to connect to the best of **multi-WiFi APs**, with **auto-checking / auto-reconnecting** features when WiFi connection is lost
+2. Rewrite for new mbed_portenta core v3.0.1+
+3. Update `Packages' Patches`
+
+### Release v1.5.1
+
+1. Optional Board_Name in Menu
+2. Optimize code by using passing by reference
 
 ### Release v1.5.0
 

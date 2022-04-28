@@ -8,13 +8,16 @@
 
   Built by Khoi Hoang https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite
   Licensed under MIT license
-  Version: 1.5.0
+  
+  Version: 1.6.0
 
   Version Modified By   Date        Comments
   ------- -----------  ----------   -----------
   1.4.0   K Hoang      11/09/2021  Add support to Portenta_H7 using Arduino mbed_portenta core
   1.4.1   K Hoang      12/10/2021  Update `platform.ini` and `library.json`
   1.5.0   K Hoang      08/01/2022  Workaround for core WiFi.status() bug. Fix the blocking issue in loop().
+  1.5.1   K Hoang      21/02/2022  Optional Board_Name in Menu. Optimize code by using passing by reference
+  1.6.0   K Hoang      27/04/2022  Use WiFiMulti_Generic library for auto-checking / auto-reconnecting MultiWiFi
  ********************************************************************************************************************************/
 
 #ifndef WiFiManager_Portenta_H7_Lite_h
@@ -39,9 +42,20 @@
   #error This code is intended to run on the MBED ARDUINO_PORTENTA_H7 platform! Please check your Tools->Board setting. 
 #endif
 
-#define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION        "WiFiManager_Portenta_H7_Lite v1.5.0"
+#ifndef WIFI_MANAGER_PORTENTA_H7_LITE_VERSION
+  #define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION             "WiFiManager_Portenta_H7_Lite v1.6.0"
+  
+  #define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION_MAJOR       1
+  #define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION_MINOR       6
+  #define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION_PATCH       0
 
+  #define WIFI_MANAGER_PORTENTA_H7_LITE_VERSION_INT         1006000
+#endif
+
+#include <WiFiMulti_Generic.h>
 #include <WiFiWebServer.h>
+
+WiFiMulti_Generic wifiMulti;
 
 //////////////////////////////////////////
 
@@ -235,7 +249,7 @@ const char WM_HTTP_CORS_ALLOW_ALL[]  PROGMEM = "*";
 
 //////////////////////////////////////////////
 
-String IPAddressToString(IPAddress _address)
+String IPAddressToString(const IPAddress& _address)
 {
   String str = String(_address[0]);
   str += ".";
@@ -355,6 +369,8 @@ class WiFiManager_Portenta_H7_Lite
       if (hadConfigData && noConfigPortal && (!isForcedConfigPortal) )
       {
         hadConfigData = true;
+        
+        wifiMulti_addAP();
 
         if (connectMultiWiFi(RETRY_TIMES_CONNECT_WIFI))
         {
@@ -570,17 +586,24 @@ class WiFiManager_Portenta_H7_Lite
     
     //////////////////////////////////////////////
 
-    void setConfigPortalIP(IPAddress portalIP = IPAddress(192, 168, 4, 1))
+		// Very bad that the core now can't permit to change AP IP address via function
+		// Have to change via #define
+		// #define DEFAULT_IP_ADDRESS "192.168.3.1"
+		// This function is obsolete from core v2.7.2
+
+#if 0		
+    void setConfigPortalIP(const IPAddress& portalIP = IPAddress(192, 168, 3, 1))
     {
       portal_apIP = portalIP;
     }
+#endif
     
     //////////////////////////////////////////////
 
     #define MIN_WIFI_CHANNEL      1
     #define MAX_WIFI_CHANNEL      11    // Channel 13 is flaky, because of bad number 13 ;-)
 
-    int setConfigPortalChannel(int channel = 1)
+    int setConfigPortalChannel(const int& channel = 1)
     {
       // If channel < MIN_WIFI_CHANNEL - 1 or channel > MAX_WIFI_CHANNEL => channel = 1
       // If channel == 0 => will use random channel from MIN_WIFI_CHANNEL to MAX_WIFI_CHANNEL
@@ -595,7 +618,7 @@ class WiFiManager_Portenta_H7_Lite
     
     //////////////////////////////////////////////
     
-    void setConfigPortal(String ssid = "", String pass = "")
+    void setConfigPortal(const String& ssid = "", const String& pass = "")
     {
       portal_ssid = ssid;
       portal_pass = pass;
@@ -603,14 +626,14 @@ class WiFiManager_Portenta_H7_Lite
     
     //////////////////////////////////////////////
 
-    void setSTAStaticIPConfig(IPAddress ip)
+    void setSTAStaticIPConfig(const IPAddress& ip)
     {
       static_IP = ip;
     }
     
     //////////////////////////////////////////////
     
-    String getWiFiSSID(uint8_t index)
+    String getWiFiSSID(const uint8_t& index)
     { 
       if (index >= NUM_WIFI_CREDENTIALS)
         return String("");
@@ -623,7 +646,7 @@ class WiFiManager_Portenta_H7_Lite
     
     //////////////////////////////////////////////
 
-    String getWiFiPW(uint8_t index)
+    String getWiFiPW(const uint8_t& index)
     {
       if (index >= NUM_WIFI_CREDENTIALS)
         return String("");
@@ -686,6 +709,13 @@ class WiFiManager_Portenta_H7_Lite
     bool isConfigDataValid()
     {
       return hadConfigData;
+    }
+    
+    //////////////////////////////////////////////
+    
+    bool isConfigMode()
+    {
+      return configuration_mode;
     }
     
     //////////////////////////////////////////////
@@ -817,7 +847,8 @@ class WiFiManager_Portenta_H7_Lite
     String macAddress = "";
     bool wifi_connected = false;
 
-    IPAddress portal_apIP = IPAddress(192, 168, 4, 1);
+    //IPAddress portal_apIP = IPAddress(192, 168, 3, 1);
+    
     int AP_channel = 10;
 
     String portal_ssid = "";
@@ -876,7 +907,7 @@ class WiFiManager_Portenta_H7_Lite
       return RFC952_hostname;
     }
     
-    void displayConfigData(WIFI_GENERIC_Configuration configData)
+    void displayConfigData(const WIFI_GENERIC_Configuration& configData)
     {
       WG_LOGERROR5(F("Hdr="),   configData.header, F(",SSID="), configData.WiFi_Creds[0].wifi_ssid,
                    F(",PW="),   configData.WiFi_Creds[0].wifi_pw);
@@ -896,7 +927,18 @@ class WiFiManager_Portenta_H7_Lite
       WG_LOGERROR3(F("SSID="), WiFi.SSID(), F(",RSSI="), WiFi.RSSI());
       WG_LOGERROR1(F("IP="), localIP() );
     }
+//////////////////////////////////////////////
 
+    void wifiMulti_addAP()    
+    {
+      for (uint8_t index = 0; index < NUM_WIFI_CREDENTIALS; index++)
+      {
+        wifiMulti.addAP(WIFI_GENERIC_config.WiFi_Creds[index].wifi_ssid, WIFI_GENERIC_config.WiFi_Creds[index].wifi_pw);
+  	  }
+  	}  
+    
+    //////////////////////////////////////////////
+    
 #define WIFI_GENERIC_BOARD_TYPE   "PORTENTA-H7-WIFI"
 #define WM_NO_CONFIG              "blank"
 
@@ -920,7 +962,7 @@ class WiFiManager_Portenta_H7_Lite
 
     //////////////////////////////////////////////
     
-    void saveForcedCP(uint32_t value)
+    void saveForcedCP(const uint32_t& value)
     {
       // Mbed PORTENTA_H7 code
       FILE *file = fopen(CONFIG_PORTAL_FILENAME, "w");
@@ -944,7 +986,7 @@ class WiFiManager_Portenta_H7_Lite
     
     //////////////////////////////////////////////
     
-    void setForcedCP(bool isPersistent)
+    void setForcedCP(const bool& isPersistent)
     {
       uint32_t readForcedConfigPortalFlag = isPersistent? FORCED_PERS_CONFIG_PORTAL_FLAG_DATA : FORCED_CONFIG_PORTAL_FLAG_DATA;
   
@@ -1326,6 +1368,8 @@ class WiFiManager_Portenta_H7_Lite
 #if USE_DYNAMIC_PARAMETERS      
       saveDynamicData();
 #endif
+
+      wifiMulti_addAP();
     }
     
     //////////////////////////////////////////////
@@ -1485,145 +1529,52 @@ class WiFiManager_Portenta_H7_Lite
     }
     
     //////////////////////////////////////////////
-    
-// Max times to try WiFi per loop() iteration. To avoid blocking issue in loop()
-// Default 1 and minimum 1.
-#if !defined(MAX_NUM_WIFI_RECON_TRIES_PER_LOOP)      
-  #define MAX_NUM_WIFI_RECON_TRIES_PER_LOOP     1
-#else
-  #if (MAX_NUM_WIFI_RECON_TRIES_PER_LOOP < 1)  
-    #define MAX_NUM_WIFI_RECON_TRIES_PER_LOOP     1
-  #endif
-#endif
-
-    // New connection logic from v1.2.0
+   
     bool connectMultiWiFi(int retry_time)
     {
-      int sleep_time  = 250;
-      int index       = 0;
-      int new_index   = 0;
-      //uint8_t status  = WL_IDLE_STATUS;
-                       
-      static int lastConnectedIndex = 255;
+			// For general board, this better be 1000 to enable connect the 1st time
+			#define WIFI_MULTI_1ST_CONNECT_WAITING_MS             1000L
 
-      WG_LOGDEBUG(F("ConMultiWifi"));
-      
-      if (static_IP != IPAddress(0, 0, 0, 0))
-      {
-        WG_LOGDEBUG(F("UseStatIP"));
-        WiFi.config(static_IP);
-      }
-      
-      if (lastConnectedIndex != 255)
-      {
-        //  Successive connection, index = ??
-        // Checking if new_index is OK
-        new_index = (lastConnectedIndex + 1) % NUM_WIFI_CREDENTIALS;
-        
-        if ( strlen(WIFI_GENERIC_config.WiFi_Creds[new_index].wifi_pw) >= PASSWORD_MIN_LEN )
-        {    
-          index = new_index;
-          WG_LOGDEBUG3(F("Using index="), index, F(", lastConnectedIndex="), lastConnectedIndex);
-        }
-        else
-        {
-          WG_LOGERROR3(F("Ignore invalid WiFi PW : index="), new_index, F(", PW="), WIFI_GENERIC_config.WiFi_Creds[new_index].wifi_pw);
-          
-          // Using the previous valid index
-          index = lastConnectedIndex;
-        }
-      }
-      else
-      {
-        //  First connection ever, index = 0
-        if ( strlen(WIFI_GENERIC_config.WiFi_Creds[0].wifi_pw) >= PASSWORD_MIN_LEN )
-        {    
-          WG_LOGDEBUG(F("First connection, Using index=0"));
-        }
-        else
-        {
-          WG_LOGERROR3(F("Ignore invalid WiFi PW : index=0, SSID="), WIFI_GENERIC_config.WiFi_Creds[0].wifi_ssid,
-                       F(", PWD="), WIFI_GENERIC_config.WiFi_Creds[0].wifi_pw);
-          
-          // Using the next valid index
-          index = 1;
-        }
-      } 
-         
-      WG_LOGERROR3(F("con2WF:SSID="), WIFI_GENERIC_config.WiFi_Creds[index].wifi_ssid,
-                   F(",PW="), WIFI_GENERIC_config.WiFi_Creds[index].wifi_pw);
-      
-      uint8_t numIndexTried = 0;
-      
-      uint8_t numWiFiReconTries = 0;
-     
-      while ( !wifi_connected && (numIndexTried++ < NUM_WIFI_CREDENTIALS) && (numWiFiReconTries++ < MAX_NUM_WIFI_RECON_TRIES_PER_LOOP) )
-      {         
-        while ( 0 < retry_time )
-        {      
-          WG_LOGDEBUG1(F("Remaining retry_time="), retry_time);
-          
-          WiFi.begin(WIFI_GENERIC_config.WiFi_Creds[index].wifi_ssid, WIFI_GENERIC_config.WiFi_Creds[index].wifi_pw); 
-          
-          //delay(3000);
-              
-          // Need restart WiFi at beginning of each cycle 
-          if ( WiFiConnected() )
-          {
-            wifi_connected = true;          
-            lastConnectedIndex = index;                                     
-            WG_LOGDEBUG1(F("WOK, lastConnectedIndex="), lastConnectedIndex);
-            
-            break;
-          }
-          else
-          {
-            delay(sleep_time);
-            retry_time--;
-          }         
-        }
-        
-        if ( WiFiConnected() )
-        {         
-          break;
-        }
-        else
-        {        
-          if (retry_time <= 0)
-          {      
-            WG_LOGERROR3(F("Failed using index="), index, F(", retry_time="), retry_time);
-            retry_time = RETRY_TIMES_CONNECT_WIFI;  
-          }
-          
-          new_index = (index + 1) % NUM_WIFI_CREDENTIALS;
-          
-          // only use new index if valid (len >= PASSWORD_MIN_LEN = 8)
-          if ( strlen(WIFI_GENERIC_config.WiFi_Creds[new_index].wifi_pw) >= PASSWORD_MIN_LEN )
-          {
-            index = new_index;
-          }
-          
-          // Must have for Portenta_H7 to reconnect after WiFi lost
-          WiFi.end();
-        }
-      }
+			#define WIFI_MULTI_CONNECT_WAITING_MS                 500L
 
-      if (wifi_connected)
-      {
-        WG_LOGERROR(F("con2WF:OK"));
-        
-        WG_LOGERROR1(F("IP="), WiFi.localIP() );
-        
-        displayWiFiData();
-      }
-      else
-      {
-        WG_LOGERROR(F("con2WF:failed"));  
-        // Can't connect, so try another index next time. Faking this index is OK and lost
-        lastConnectedIndex = index;  
-      }
+			WG_LOGDEBUG("No WiFi. Trying to scan and reconnect");
 
-      return wifi_connected;  
+			WiFi.disconnect();
+
+			int i = 0;
+
+			uint8_t status = wifiMulti.run();
+
+			delay(WIFI_MULTI_1ST_CONNECT_WAITING_MS);
+
+			while ( ( i++ < (retry_time * 5) ) && ( status != WL_CONNECTED ) )
+			{
+				status = WiFi.status();
+
+				if ( status == WL_CONNECTED )
+				  break;
+				else
+				  delay(WIFI_MULTI_CONNECT_WAITING_MS);
+			}
+
+			if ( status == WL_CONNECTED )
+			{
+				WG_LOGERROR1(F("WiFi connected after time: "), i);
+				WG_LOGERROR3(F("SSID:"), WiFi.SSID(), F(",RSSI="), WiFi.RSSI());
+				WG_LOGERROR1(F("IP address:"), WiFi.localIP() );
+			}
+			else
+			{
+				WG_LOGERROR(F("WiFi not connected"));
+
+				if (wifiMulti.run() != WL_CONNECTED)
+				{
+				  Serial.println("WiFi not connected!");
+				  delay(1000);
+				}
+			}
+
+			return (status == WL_CONNECTED);
     }
     
     //////////////////////////////////////////////
@@ -1975,9 +1926,7 @@ class WiFiManager_Portenta_H7_Lite
 	    
 	    WiFiNetworksFound = scanWifiNetworks(&indices);	
 #endif    
-    
-      WiFi.config(portal_apIP);
-
+   
       if ( (portal_ssid == "") || portal_pass == "" )
       {
         String randomNum = String(random(0xFFFFFF), HEX);
@@ -1998,7 +1947,7 @@ class WiFiManager_Portenta_H7_Lite
         channel = AP_channel;
 
       WG_LOGERROR3(F("SSID="), portal_ssid, F(",PW="), portal_pass);
-      WG_LOGERROR3(F("IP="), portal_apIP, F(",CH="), channel);
+      WG_LOGERROR3(F("IP="), DEFAULT_IP_ADDRESS, F(",CH="), channel);
 
 #if USE_ESP_AT_SHIELD
       // start access point, AP only,default channel 10
@@ -2061,7 +2010,7 @@ class WiFiManager_Portenta_H7_Lite
 
     //////////////////////////////////////////
 	
-	  void setMinimumSignalQuality(int quality)
+	  void setMinimumSignalQuality(const int& quality)
 	  {
 	    _minimumQuality = quality;
 	  }
@@ -2189,7 +2138,7 @@ class WiFiManager_Portenta_H7_Lite
 
 	  //////////////////////////////////////////
 
-	  int getRSSIasQuality(int RSSI)
+	  int getRSSIasQuality(const int& RSSI)
 	  {
 	    int quality = 0;
 

@@ -6,7 +6,8 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](#Contributing)
 [![GitHub issues](https://img.shields.io/github/issues/khoih-prog/WiFiManager_Portenta_H7_Lite.svg)](http://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite/issues)
 
-<a href="https://www.buymeacoffee.com/khoihprog6" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
+<a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
 
 
 ---
@@ -20,6 +21,7 @@
   * [WiFi.begin() bug](#wifibegin-bug)
 * [Why do we need this WiFiManager_Portenta_H7_Lite library](#why-do-we-need-this-WiFiManager_Portenta_H7_Lite-library)
   * [Features](#features)
+  * [WiFiMulti_Generic library usage](#WiFiMulti_Generic-library-usage)
   * [Currently supported Boards](#currently-supported-boards)
   * [Currently supported WiFi shields/modules](#currently-supported-wifi-shieldsmodules)
 * [Changelog](changelog.md) 
@@ -177,6 +179,14 @@ New recent features:
 
 ---
 
+#### WiFiMulti_Generic library usage
+
+The usage the new [WiFiMulti_Generic](https://github.com/khoih-prog/WiFiMulti_Generic) library to help connect to the best of **multi-WiFi APs**, with **auto-checking / auto-reconnecting** features when WiFi connection is lost.
+
+
+
+---
+
 #### Currently supported Boards
 
 This [**WiFiManager_Portenta_H7_Lite** library](https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite) currently supports these following boards:
@@ -196,13 +206,14 @@ This [**WiFiManager_Portenta_H7_Lite** library](https://github.com/khoih-prog/Wi
 ## Prerequisites
 
 1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
-2. [`ArduinoCore-mbed mbed_portenta core 2.6.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+2. [`ArduinoCore-mbed mbed_portenta core 3.0.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 
 
 3. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-4. [`WiFiWebServer library v1.5.5-1+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+4. [`WiFiWebServer library v1.8.0+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
 5. [`LittleFS_Portenta_H7 v1.1.0+`](https://github.com/khoih-prog/LittleFS_Portenta_H7). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_Portenta_H7.svg?)](https://www.ardu-badge.com/LittleFS_Portenta_H7)
-6. [`DoubleResetDetector_Generic v1.8.0+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
+6. [`DoubleResetDetector_Generic v1.8.1+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
+7. [`WiFiMulti_Generic library v1.1.1+`](https://github.com/khoih-prog/WiFiMulti_Generic) to use WiFiMulti function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiMulti_Generic.svg?)](https://www.ardu-badge.com/WiFiMulti_Generic). **New**
 
 ---
 
@@ -225,7 +236,7 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 1. Install [VS Code](https://code.visualstudio.com/)
 2. Install [PlatformIO](https://platformio.org/platformio-ide)
-3. Install [**WiFiManager_Portenta_H7_Lite** library](https://platformio.org/lib/show/12823/WiFiManager_Portenta_H7_Lite) by using [Library Manager](https://platformio.org/lib/show/12823/WiFiManager_Portenta_H7_Lite/installation). Search for **WiFiManager_Portenta_H7_Lite** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
+3. Install [**WiFiManager_Portenta_H7_Lite** library](https://registry.platformio.org/libraries/khoih-prog/WiFiManager_Portenta_H7_Lite) by using [Library Manager](https://registry.platformio.org/libraries/khoih-prog/WiFiManager_Portenta_H7_Lite/installation). Search for **WiFiManager_Portenta_H7_Lite** in [Platform.io Author's Libraries](https://platformio.org/lib/search?query=author:%22Khoi%20Hoang%22)
 4. Use included [platformio.ini](platformio/platformio.ini) file from examples to ensure that all dependent libraries will installed automatically. Please visit documentation for the other options and examples at [Project Configuration File](https://docs.platformio.org/page/projectconf.html)
 
 ---
@@ -235,12 +246,12 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 #### 1. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.0.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -253,9 +264,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 2.6.1. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 3.0.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/2.6.1/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -541,7 +552,7 @@ Check [retries block the main loop #18](https://github.com/khoih-prog/WiFiManage
 
 In `Configuration Portal Mode`, it starts an AP called `WIFI_GENERIC_XXXXXX`. Connect to it using the `configurable password` you can define in the code. For example, `MyWIFI_GENERIC_XXXXXX` (see examples):
 
-After you connected, please, go to http://192.168.4.1 or newly configured AP IP, you'll see this `Main` page:
+After you connected, please, go to http://192.168.3.1, you'll see this `Main` page:
 
 <p align="center">
     <img src="https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite/blob/main/pics/Main.png">
@@ -1206,33 +1217,41 @@ This is the terminal output when running [**Portenta_H7_WiFi**](examples/Portent
 
 ```
 Start Portenta_H7_WiFi on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.5.0
+WiFiMulti_Generic v1.1.1
+WiFiManager_Portenta_H7_Lite v1.6.0
 [WG] Hostname=Portenta-Controller
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
 LittleFS size (KB) = 1280.00
-LittleFS Mount Fail
-Formatting... 
-Loading DRD file failed
-Flag read = 0x1060a5b
+LittleFS Mount OK
+LittleFS Flag read = 0xd0d04321
+Flag read = 0xd0d04321
 No doubleResetDetected
 Saving DOUBLERESETDETECTOR_FLAG to DRD file : 0xd0d01234
 Saving DRD file OK
-SetFlag write = 0xd0d01234
+LittleFS Flag read = 0xd0d04321
+ClearFlag write = 0xd0d04321
+[WG] Double Reset Detected
+[WG] CCSum=0x1467,RCSum=0x1467
+[WG] CrCCsum=0x1981,CrRCsum=0x1981
+[WG] Valid Stored Dynamic Data
+[WG] ======= Start Stored Config Data =======
+[WG] Hdr=PORTENTA-H7-WIFI,SSID=HueNet1,PW=12345678
+[WG] SSID1=HueNet2,PW1=12345678
+[WG] BName=Portenta_H7
+[WG] i=0,id=sv1,data=account.duckdns.org
+[WG] i=1,id=tk1,data=token1
+[WG] i=2,id=sv2,data=account.ddns.net
+[WG] i=3,id=tk2,data=token2
+[WG] i=4,id=prt,data=8080
+[WG] i=5,id=mqt,data=mqtt.duckdns.org
 [WG] bg: isForcedConfigPortal = false
-[WG] bg:Stay forever in CP:No ConfigDat
+[WG] bg:Stay forever in CP:DRD/MRD
 [WG] clearForcedCP
 [WG] SaveCPFile 
 [WG] OK
-[WG] SaveBkUpCPFile 
-[WG] OK
 [WG] SSID=WIFI_GENERIC_51F485,PW=MyWIFI_GENERIC_51F485
-[WG] IP=192.168.4.1,CH=4
-Stop doubleResetDetecting
-Saving to DRD file : 0xd0d04321
-Saving DRD file OK
-LittleFS Flag read = 0xd0d04321
-ClearFlag write = 0xd0d04321
+[WG] IP=192.168.3.1,CH=5
 F
 Your stored Credentials :
 Blynk Server1 = account.duckdns.org
@@ -1241,8 +1260,8 @@ Blynk Server2 = account.ddns.net
 Token2 = token2
 Port = 8080
 MQTT Server = mqtt.duckdns.org
-FFFFFFFFF FFFFF
-[WG] h:UpdLittleFS
+FFFFF[WG] 
+h:UpdLittleFS
 [WG] h:Rst
 ```
 
@@ -1251,7 +1270,8 @@ FFFFFFFFF FFFFF
 
 ```
 Start Portenta_H7_WiFi on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.5.0
+WiFiMulti_Generic v1.1.1
+WiFiManager_Portenta_H7_Lite v1.6.0
 [WG] Hostname=Portenta-Controller
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1263,24 +1283,22 @@ No doubleResetDetected
 Saving DOUBLERESETDETECTOR_FLAG to DRD file : 0xd0d01234
 Saving DRD file OK
 SetFlag write = 0xd0d01234
-[WG] CCSum=0x1435,RCSum=0x1435
-[WG] CrCCsum=0x163b,CrRCsum=0x163b
+[WG] CCSum=0x1467,RCSum=0x1467
+[WG] CrCCsum=0x1981,CrRCsum=0x1981
 [WG] Valid Stored Dynamic Data
 [WG] ======= Start Stored Config Data =======
 [WG] Hdr=PORTENTA-H7-WIFI,SSID=HueNet1,PW=12345678
-[WG] SSID1=HueNet,PW1=12345678
+[WG] SSID1=HueNet2,PW1=12345678
 [WG] BName=Portenta_H7
-[WG] i=0,id=sv1,data=new.duckdns.org
+[WG] i=0,id=sv1,data=account.duckdns.org
 [WG] i=1,id=tk1,data=token1
-[WG] i=2,id=sv2,data=new.ddns.net
+[WG] i=2,id=sv2,data=account.ddns.net
 [WG] i=3,id=tk2,data=token2
 [WG] i=4,id=prt,data=8080
 [WG] i=5,id=mqt,data=mqtt.duckdns.org
-[WG] con2WF:SSID=HueNet1,PW=12345678
-[WG] con2WF:OK
-[WG] IP=192.168.2.130
-[WG] SSID=HueNet1,RSSI=-32
-[WG] IP=192.168.2.130
+[WG] WiFi connected after time: 1
+[WG] SSID:HueNet1,RSSI=-45
+[WG] IP address:192.168.2.105
 [WG] b:WOK
 Stop doubleResetDetecting
 Saving to DRD file : 0xd0d04321
@@ -1288,15 +1306,21 @@ Saving DRD file OK
 LittleFS Flag read = 0xd0d04321
 ClearFlag write = 0xd0d04321
 H
+
 Your stored Credentials :
-Blynk Server1 = new.duckdns.org
+Blynk Server1 = account.duckdns.org
 Token1 = token1
-Blynk Server2 = new.ddns.net
+Blynk Server2 = account.ddns.net
 Token2 = token2
 Port = 8080
 MQTT Server = mqtt.duckdns.org
-HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH
-HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH HHHHHHHHHH
+H[WG] r:Check&WLost                 <====== WiFi Lost, and auto-reconnected
+[WG] r:WLost.ReconW
+[WG] WiFi connected after time: 1
+[WG] SSID:HueNet2,RSSI=-55
+[WG] IP address:192.168.2.105
+[WG] r:WOK
+H
 ```
 
 
@@ -1315,7 +1339,8 @@ This is the terminal output when running [**Portenta_H7_WiFi_MQTT**](examples/Po
 
 ```
 Start Portenta_H7_WiFi_MQTT on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.5.0
+WiFiMulti_Generic v1.1.1
+WiFiManager_Portenta_H7_Lite v1.6.0
 [WG] Hostname=Portenta-MQTT
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1334,7 +1359,7 @@ SetFlag write = 0xd0d01234
 [WG] SaveCPFile 
 [WG] OK
 [WG] SSID=WIFI_GENERIC_51F485,PW=MyWIFI_GENERIC_51F485
-[WG] IP=192.168.4.1,CH=9
+[WG] IP=192.168.3.1,CH=9
 Stop doubleResetDetecting
 Saving to DRD file : 0xd0d04321
 Saving DRD file OK
@@ -1359,7 +1384,8 @@ NNNN NNNNN NNNNN NNNNN NNNNN NNNNN NNNNN NN
 
 ```
 Start Portenta_H7_WiFi_MQTT on PORTENTA_H7_M7 with Portenta_H7 WiFi
-WiFiManager_Portenta_H7_Lite v1.5.0
+WiFiMulti_Generic v1.1.1
+WiFiManager_Portenta_H7_Lite v1.6.0
 [WG] Hostname=Portenta-MQTT
 Flash Size: (KB) = 2048.00
 FlashIAP Start Address: = 0x80A0000
@@ -1489,6 +1515,9 @@ Submit issues to: [WiFiManager_Portenta_H7_Lite issues](https://github.com/khoih
 22. Add `LibraryPatches` for [**Adafruit_MQTT_Library**](https://github.com/adafruit/Adafruit_MQTT_Library) to fix compiler error for Portenta_H7, RP2040-based and many other boards.
 23. Fix the blocking issue in loop() with configurable `WIFI_RECON_INTERVAL`
 24. Workaround for core WiFi.status() bug, which does not detect WiFi lost.
+25. Use [WiFiMulti_Generic](https://github.com/khoih-prog/WiFiMulti_Generic) library to connect to the best of **multi-WiFi APs**, with **auto-checking / auto-reconnecting** features when WiFi connection is lost
+26. Rewrite for new mbed_portenta core v3.0.1+
+
 
 ---
 ---
