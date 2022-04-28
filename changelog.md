@@ -27,7 +27,8 @@
 
 1. Use [WiFiMulti_Generic](https://github.com/khoih-prog/WiFiMulti_Generic) library to connect to the best of **multi-WiFi APs**, with **auto-checking / auto-reconnecting** features when WiFi connection is lost
 2. Rewrite for new mbed_portenta core v3.0.1+
-3. Update `Packages' Patches`
+3. Add `lib_ldf_mode = chain+` in `platformio.ini`
+4. Update `Packages' Patches`
 
 ### Release v1.5.1
 
