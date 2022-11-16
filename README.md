@@ -8,6 +8,8 @@
 
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Donate to my libraries using BuyMeACoffee" style="height: 50px !important;width: 181px !important;" ></a>
 <a href="https://www.buymeacoffee.com/khoihprog6" title="Donate to my libraries using BuyMeACoffee"><img src="https://img.shields.io/badge/buy%20me%20a%20coffee-donate-orange.svg?logo=buy-me-a-coffee&logoColor=FFDD00" style="height: 20px !important;width: 200px !important;" ></a>
+<a href="https://profile-counter.glitch.me/khoih-prog/count.svg" title="Total khoih-prog Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog/count.svg" style="height: 30px;width: 200px;"></a>
+<a href="https://profile-counter.glitch.me/khoih-prog-WiFiManager_Portenta_H7_Lite/count.svg" title="WiFiManager_Portenta_H7_Lite Visitor count"><img src="https://profile-counter.glitch.me/khoih-prog-WiFiManager_Portenta_H7_Lite/count.svg" style="height: 30px;width: 200px;"></a>
 
 
 ---
@@ -108,7 +110,7 @@ The current `mbed_portenta core v2.6.1` has bug that once WiFi is connected, `Wi
 
 The current workaround for this `WiFi.status()` bug is to use it with `WiFi.RSSI()`, such as 
 
-```
+```cpp
 bool WiFiConnected()
 {
   return ( (WiFi.status() == WL_CONNECTED) && (WiFi.RSSI() != 0) );
@@ -128,7 +130,7 @@ The current `mbed_portenta core v2.6.1` has bug that once WiFi is connected and 
 
 The current fix for this bug is to use `WiFi.end()` before `WiFi.begin()`, such as 
 
-```
+```cpp
 // Must have to reconnect after WiFi lost
 WiFi.end();
   
@@ -206,12 +208,12 @@ This [**WiFiManager_Portenta_H7_Lite** library](https://github.com/khoih-prog/Wi
 ## Prerequisites
 
 1. [`Arduino IDE 1.8.19+` for Arduino](https://github.com/arduino/Arduino). [![GitHub release](https://img.shields.io/github/release/arduino/Arduino.svg)](https://github.com/arduino/Arduino/releases/latest)
-2. [`ArduinoCore-mbed mbed_portenta core 3.0.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
+2. [`ArduinoCore-mbed mbed_portenta core 3.4.1+`](https://github.com/arduino/ArduinoCore-mbed) for Arduino **Portenta_H7** boards, such as **Portenta_H7 Rev2 ABX00042, etc.**. [![GitHub release](https://img.shields.io/github/release/arduino/ArduinoCore-mbed.svg)](https://github.com/arduino/ArduinoCore-mbed/releases/latest)
 3. [`Functional-Vlpp library v1.0.2+`](https://github.com/khoih-prog/functional-vlpp) to use server's lambda function. To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/Functional-Vlpp.svg?)](https://www.ardu-badge.com/Functional-Vlpp)
-4. [`WiFiWebServer library v1.8.0+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
-5. [`LittleFS_Portenta_H7 v1.1.0+`](https://github.com/khoih-prog/LittleFS_Portenta_H7). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_Portenta_H7.svg?)](https://www.ardu-badge.com/LittleFS_Portenta_H7)
+4. [`WiFiWebServer library v1.10.0+`](https://github.com/khoih-prog/WiFiWebServer). To install. check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiWebServer.svg?)](https://www.ardu-badge.com/WiFiWebServer)
+5. [`LittleFS_Portenta_H7 v1.2.0+`](https://github.com/khoih-prog/LittleFS_Portenta_H7). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/LittleFS_Portenta_H7.svg?)](https://www.ardu-badge.com/LittleFS_Portenta_H7)
 6. [`DoubleResetDetector_Generic v1.8.1+`](https://github.com/khoih-prog/DoubleResetDetector_Generic). To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/DoubleResetDetector_Generic.svg?)](https://www.ardu-badge.com/DoubleResetDetector_Generic)
-7. [`WiFiMulti_Generic library v1.1.1+`](https://github.com/khoih-prog/WiFiMulti_Generic) to use WiFiMulti function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiMulti_Generic.svg?)](https://www.ardu-badge.com/WiFiMulti_Generic). **New**
+7. [`WiFiMulti_Generic library v1.2.2+`](https://github.com/khoih-prog/WiFiMulti_Generic) to use WiFiMulti function. To install, check [![arduino-library-badge](https://www.ardu-badge.com/badge/WiFiMulti_Generic.svg?)](https://www.ardu-badge.com/WiFiMulti_Generic). **New**
 
 ---
 
@@ -244,12 +246,12 @@ You can also use this link [![arduino-library-badge](https://www.ardu-badge.com/
 
 #### 1. For Portenta_H7 boards using Arduino IDE in Linux
 
-  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.0.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.1/portenta_post_install.sh). 
+  **To be able to upload firmware to Portenta_H7 using Arduino IDE in Linux (Ubuntu, etc.)**, you have to copy the file [portenta_post_install.sh](Packages_Patches/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh) into mbed_portenta directory (~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh). 
   
   Then run the following command using `sudo`
   
 ```
-$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.1
+$ cd ~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1
 $ chmod 755 portenta_post_install.sh
 $ sudo ./portenta_post_install.sh
 ```
@@ -262,9 +264,9 @@ This will create the file `/etc/udev/rules.d/49-portenta_h7.rules` as follows:
 SUBSYSTEMS=="usb", ATTRS{idVendor}=="2341", ATTRS{idProduct}=="035b", GROUP="plugdev", MODE="0666"
 ```
 
-Supposing the ArduinoCore-mbed core version is 3.0.1. Now only one file must be copied into the directory:
+Supposing the ArduinoCore-mbed core version is 3.4.1. Now only one file must be copied into the directory:
 
-- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.0.1/portenta_post_install.sh`
+- `~/.arduino15/packages/arduino/hardware/mbed_portenta/3.4.1/portenta_post_install.sh`
 
 Whenever a new version is installed, remember to copy this files into the new version directory. For example, new version is x.yy.zz
 
@@ -308,7 +310,7 @@ WiFiManager_Portenta_H7_Lite* WiFiManager_Portenta_H7;
 
 - To add custom parameters, just add
 
-```
+```cpp
 #include "defines.h"
 
 // USE_DYNAMIC_PARAMETERS defined in defines.h
@@ -372,7 +374,7 @@ uint16_t NUM_MENU_ITEMS = 0;
 
 - If you don't need to add dynamic parameters, use the following in sketch
 
-```
+```cpp
 #define USE_DYNAMIC_PARAMETERS      false
 ```
 
@@ -411,21 +413,21 @@ WiFiManager_Portenta_H7->setConfigPortalIP(IPAddress(xxx,xxx,xxx,xxx));
 
 - To set custom DHCP HostName :
  
-```
+```cpp
 // Set customized DHCP HostName
 WiFiManager_Portenta_H7->begin("SAMD_ABCDEF");
 ```
  
 or just use the default Hostname, for example "SAMD_XXXXXX" for SAMD
 
-```
+```cpp
 //Or use default Hostname "WIFI_GENERIC_XXXXXX"
 //WiFiManager_Portenta_H7->begin();
 ```
 
 #### 8. To use custom HTML Style
 
-```
+```cpp
 const char NewCustomsStyle[] /*PROGMEM*/ = "<style>div,input{padding:5px;font-size:1em;}input{width:95%;}body{text-align: center;}\
 button{background-color:blue;color:white;line-height:2.4rem;font-size:1.2rem;width:100%;}fieldset{border-radius:0.3rem;margin:0px;}</style>";
 
@@ -437,13 +439,13 @@ WiFiManager_Portenta_H7->setCustomsStyle(NewCustomsStyle);
 #### 9. To use custom Head Elements
 
 
-```
+```cpp
 WiFiManager_Portenta_H7->setCustomsHeadElement("<style>html{filter: invert(10%);}</style>");
 ```
 
 #### 10. To use CORS Header
 
-```
+```cpp
 WiFiManager_Portenta_H7->setCORSHeader("Your Access-Control-Allow-Origin");
 ```
 
@@ -457,7 +459,7 @@ Once Credentials / WiFi network information is saved in the host non-volatile me
 
 #### 11.1 If you need to use and input only one set of WiFi SSID/PWD
 
-```
+```cpp
 // Permit input only one set of WiFi SSID/PWD. The other can be "NULL or "blank"
 // Default is false (if not defined) => must input 2 sets of SSID/PWD
 #define REQUIRE_ONE_SET_SSID_PW       true
@@ -466,7 +468,7 @@ But it's always advisable to use and input both sets for reliability.
  
 #### 11.2 If you need to use both sets of WiFi SSID/PWD
 
-```
+```cpp
 // Permit input only one set of WiFi SSID/PWD. The other can be "NULL or "blank"
 // Default is false (if not defined) => must input 2 sets of SSID/PWD
 #define REQUIRE_ONE_SET_SSID_PW       false
@@ -477,7 +479,7 @@ But it's always advisable to use and input both sets for reliability.
 #### 12.1 Enable auto-scan of WiFi networks for selection in Configuration Portal
 
 
-```
+```cpp
 #define SCAN_WIFI_NETWORKS                  true
 ```
 
@@ -485,7 +487,7 @@ The manual input of SSIDs is default enabled, so that users can input arbitrary 
 
 #### 12.2 Disable manually input SSIDs
 
-```
+```cpp
 // To disable manually input SSID, only from a scanned SSID lists
 #define MANUAL_SSID_INPUT_ALLOWED           false
 ```
@@ -497,7 +499,7 @@ This is for normal use-cases in which users can only select an SSID from a scann
 The maximum number of SSIDs in the list is selectable from 2 to 15 (for ESP8266/ESP32-AT shields, from 2-6). If invalid number of SSIDs is selected, the default number of 10 will be used.
 
 
-```
+```cpp
 // From 2-15
 #define MAX_SSID_IN_LIST                    8
 ```
@@ -515,7 +517,7 @@ To use, uncomment in `defines.h`.
 
 Check [retries block the main loop #18](https://github.com/khoih-prog/WiFiManager_NINA_Lite/issues/18#issue-1094004380)
 
-```
+```cpp
 #define MAX_NUM_WIFI_RECON_TRIES_PER_LOOP     2
 ```
 
@@ -529,7 +531,7 @@ Only use whenever urgent tasks in loop() can't be delayed. But if so, it's bette
 
 Check [retries block the main loop #18](https://github.com/khoih-prog/WiFiManager_NINA_Lite/issues/18#issuecomment-1006197561)
 
-```
+```cpp
 #define WIFI_RECON_INTERVAL                   30000     // 30s
 ```
 
@@ -598,7 +600,7 @@ See this example and modify as necessary
 
 #### 1. To always load [Default Credentials](examples/Portenta_H7_WiFi/Credentials.h) and override Config Portal data
 
-```
+```cpp
 // Used mostly for development and debugging. FORCES default values to be loaded each run.
 // Config Portal data input will be ignored and overridden by DEFAULT_CONFIG_DATA
 bool LOAD_DEFAULT_CONFIG_DATA = true;
@@ -608,7 +610,7 @@ bool LOAD_DEFAULT_CONFIG_DATA = true;
 
 Config Portal data input will be override DEFAULT_CONFIG_DATA
 
-```
+```cpp
 // Used mostly once debugged. Assumes good data already saved in device.
 // Config Portal data input will be override DEFAULT_CONFIG_DATA
 bool LOAD_DEFAULT_CONFIG_DATA = false;
@@ -694,7 +696,7 @@ Example of [Default dynamicParams](examples/Portenta_H7_WiFi/dynamicParams.h)
 
 - To add custom parameters, just modify the example below
 
-```
+```cpp
 #include "defines.h"
 
 // USE_DYNAMIC_PARAMETERS defined in defines.h
@@ -755,13 +757,13 @@ uint16_t NUM_MENU_ITEMS = 0;
 ```
 - If you don't need to add dynamic parameters, use the following in sketch
 
-```
+```cpp
 #define USE_DYNAMIC_PARAMETERS     false
 ```
 
 or
 
-```
+```cpp
 /////////////// Start dynamic Credentials ///////////////
 
 MenuItem myMenuItems [] = {};

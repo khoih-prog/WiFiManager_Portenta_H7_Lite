@@ -1,15 +1,15 @@
 /*******************************************************************************************************************************
   WiFiManager_Portenta_H7_Lite_Debug.h
-  
+
   For Portenta_H7 boards using built-in
 
-  WiFiManager_Portenta_H7_Lite is a library for the Portenta_H7 boards 
-  (https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite) to enable store Credentials in LittleFS for easy 
+  WiFiManager_Portenta_H7_Lite is a library for the Portenta_H7 boards
+  (https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite) to enable store Credentials in LittleFS for easy
   configuration/reconfiguration and autoconnect/autoreconnect of WiFi and other services without Hardcoding.
 
   Built by Khoi Hoang https://github.com/khoih-prog/WiFiManager_Portenta_H7_Lite
   Licensed under MIT license
-  
+
   Version: 1.6.0
 
   Version Modified By   Date        Comments
